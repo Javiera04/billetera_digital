@@ -8,5 +8,7 @@ public interface CuentaService {
 	Cuenta obtenerPorUser(String username);
 	void retirar(String username, int monto);
 	void depositar(String username, int monto);
+	Cuenta obtenerPorId(int id);
+	void transferir(int idOrigen, int idDestino, int monto);
 
 }

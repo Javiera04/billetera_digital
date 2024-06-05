@@ -21,18 +21,22 @@
 	          <thead>
 	            <tr>
 	              <th scope="col">N° Transacción</th>
+	              <th scope="col">Origen</th>
+	              <th scope="col">Destino</th>
 	              <th scope="col">Fecha</th>
 	              <th scope="col">Monto</th>
 	              <th scope="col">Tipo</th>
 	            </tr>
 	          </thead>
 	          <tbody class="table-group-divider">
-	          <c:forEach items="${listado}" var="transaccion">
+	          <c:forEach items="${transaccion}" var="transaccion">
 	          	<tr>
 	              <th scope="row">${transaccion.id_transaccion}</th>
+	              <td>${transaccion.id_cuenta_origen}</td>
+	              <td>${transaccion.id_cuenta_destino}</td>
 	              <td>${transaccion.fecha_transaccion}</td>
 	              <td>${transaccion.monto}</td>
-	              <td>${transaccion.nombre_tipo}</td>
+	              <td>${transaccion.id_tipo}</td>
 	            </tr>
 	          </c:forEach>
 	          </tbody>

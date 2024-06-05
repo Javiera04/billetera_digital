@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bootcamp.billetera.model.Cuenta;
 import com.bootcamp.billetera.model.Transaccion;
 import com.bootcamp.billetera.model.Usuario;
 import com.bootcamp.billetera.service.CuentaService;
@@ -95,6 +96,30 @@ public class CuentaController {
 		
 		return "retiro.jsp";
 	}	
+	
+	@GetMapping("/transferir")
+	public String getTransferir() {
+		return "transferir.jsp";
+	}
+	
+	@PostMapping("/transferir")
+	public String postTransferir(@RequestParam("cuenta_destino") int idDestino, 
+			@RequestParam("monto_transferencia") int monto,
+			Authentication authentication,
+			Model model) {
+		String userAuth = authentication.getName();
+		Cuenta cuentaOrigen = cuentaService.obtenerPorUser(userAuth);
+		
+		try {
+			cuentaService.transferir(cuentaOrigen.getId_cuenta(), idDestino, monto);
+			model.addAttribute("message", "Transferencia realizada con éxito");
+		}catch (Exception e) {
+            model.addAttribute("message", "Error al realizar la transferencia: " + e.getMessage());
+        }
+		
+		return "transferir.jsp";
+		
+	}
 	
 	
 

@@ -1,5 +1,7 @@
 package com.bootcamp.billetera.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.billetera.dao.TransaccionDao;
@@ -26,6 +28,11 @@ public class TransaccionServiceImpl implements TransaccionService{
 			log.error("Error al crear la transaccion:"+ex.getMessage(),ex);
 			return false;
 		}
+	}
+
+	@Override
+	public List<Transaccion> obtenerTransacciones(String username) {
+		return transaccionDao.obtenerTransacciones(username);
 	}
 
 }

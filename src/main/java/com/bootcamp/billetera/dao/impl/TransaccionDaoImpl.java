@@ -1,10 +1,14 @@
 package com.bootcamp.billetera.dao.impl;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bootcamp.billetera.dao.TransaccionDao;
+import com.bootcamp.billetera.mapper.TransaccionRowMapper;
 import com.bootcamp.billetera.model.Transaccion;
 
 import lombok.extern.apachecommons.CommonsLog;
@@ -38,6 +42,27 @@ public class TransaccionDaoImpl implements TransaccionDao{
 		}catch(Exception ex) {
 			log.error("Error al crear:"+ex.getMessage(),ex);
 			return false;
+		}
+	}
+
+	@Override
+	public List<Transaccion> obtenerTransacciones(String username) {
+		try{
+			String sql ="""
+					select id_transaccion, id_cuenta_origen, id_cuenta_destino, 
+					fecha_transaccion, monto, id_tipo
+					from transaccion t inner join usuario u 
+					on t.id_cuenta_origen = u.id_usuario
+					where u.username = ?
+					""";
+			List<Transaccion> transacciones = jdbcTemplate.query(sql, 
+					new TransaccionRowMapper(),
+					new Object[] {username});
+			
+			return transacciones;
+		}catch(Exception e) {
+			System.out.println("Error:"+e.getMessage());
+			return Collections.emptyList();
 		}
 	}
 

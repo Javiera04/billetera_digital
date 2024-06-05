@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bootcamp.billetera.dao.CuentaDao;
 import com.bootcamp.billetera.model.Cuenta;
-import com.bootcamp.billetera.model.Usuario;
 import com.bootcamp.billetera.service.CuentaService;
 
 import lombok.extern.apachecommons.CommonsLog;
@@ -30,7 +29,7 @@ public class CuentaServiceImpl implements CuentaService{
 
 	@Override
 	public Cuenta obtenerPorUser(String username) {		
-		return cuentaDao.obtenerPorUser(username);
+		return cuentaDao.obtenerCuentaPorUser(username);
 	}
 
 	@Override
@@ -66,6 +65,25 @@ public class CuentaServiceImpl implements CuentaService{
 			
 		}catch(Exception ex) {
 			log.error("Error al retirar saldo:"+ex.getMessage(),ex);
+		}
+		
+	}
+
+	@Override
+	public Cuenta obtenerPorId(int id) {
+		return cuentaDao.obtenerCuentaPorId(id);
+	}
+
+	@Override
+	public void transferir(int idOrigen, int idDestino, int monto) {
+		Cuenta cuentaOrigen = cuentaDao.obtenerCuentaPorId(idOrigen);
+		Cuenta cuentaDestino = cuentaDao.obtenerCuentaPorId(idDestino);
+		
+		if(cuentaOrigen.getSaldo()>=monto && idOrigen != idDestino) {
+			cuentaDao.actualizarSaldoPorId(idOrigen, cuentaOrigen.getSaldo()-monto);
+			cuentaDao.actualizarSaldoPorId(idDestino, cuentaDestino.getSaldo()+monto);
+		}else {
+			System.out.println("Saldo insuficiente en la cuenta de origen");
 		}
 		
 	}

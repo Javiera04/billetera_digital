@@ -45,12 +45,12 @@ public class CuentaDaoImpl implements CuentaDao{
 	}
 
 	@Override
-	public Cuenta obtenerPorUser(String username) {
+	public Cuenta obtenerCuentaPorUser(String username) {
 		try {
 			String sql = """
 					select c.id_cuenta, c.nro_cuenta, c.saldo, c.id_usuario 
 					from cuenta c inner join usuario u on c.id_usuario = u.id_usuario
-					where u.username = ?;
+					where u.username = ?
 					""";
 			Cuenta cuenta = jdbcTemplate.queryForObject(sql, 
 										new CuentaRowMapper(), 
@@ -77,9 +77,7 @@ public class CuentaDaoImpl implements CuentaDao{
 		}catch(Exception ex) {
 			log.error("Error al obtener por saldo:"+ex.getMessage(),ex);
 			return -1;
-		}
-
-		
+		}	
 		
 	}
 
@@ -97,6 +95,44 @@ public class CuentaDaoImpl implements CuentaDao{
 		}catch(Exception ex) {
 			log.error("Error al actualizar saldo:"+ex.getMessage(),ex);
 		}
+	}
+
+	@Override
+	public Cuenta obtenerCuentaPorId(int id) {
+		try {
+			String sql ="""
+					select id_cuenta, nro_cuenta, saldo, id_usuario 
+					from cuenta 
+					where id_cuenta = ?				
+					""";
+			Cuenta cuenta = jdbcTemplate.queryForObject(sql,
+											new CuentaRowMapper(),
+											new Object[] {id});
+			
+			return cuenta;
+			
+			
+		}catch(Exception ex) {
+			log.error("Error al actualizar saldo:"+ex.getMessage(),ex);
+			return null;
+		}
+
+	}
+
+	@Override
+	public void actualizarSaldoPorId(int id, int nuevoSaldo) {
+		try {
+			String sql="""
+					UPDATE cuenta 
+					SET saldo = ?
+					WHERE id_usuario = ?
+					""";
+			jdbcTemplate.update(sql,nuevoSaldo, id);
+			
+		}catch(Exception ex) {
+			log.error("Error al actualizar saldo:"+ex.getMessage(),ex);
+		}
+		
 	}
 
 }

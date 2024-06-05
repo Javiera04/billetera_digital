@@ -6,5 +6,6 @@ public interface UsuarioService {
 	
 	boolean crear(Usuario usuario);
 	Usuario obtenerPorUser(String username);
+	Usuario obtenerPorId(int id);
 
 }
