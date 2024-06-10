@@ -35,4 +35,14 @@ public class TransaccionServiceImpl implements TransaccionService{
 		return transaccionDao.obtenerTransacciones(username);
 	}
 
+	@Override
+	public boolean crearTransaccionDestino(Transaccion transaccion) {
+		try {
+			return transaccionDao.crearTransaccionDestino(transaccion);
+		}catch(Exception ex){
+			log.error("Error al crear la transaccion:"+ex.getMessage(),ex);
+			return false;
+		}
+	}
+
 }

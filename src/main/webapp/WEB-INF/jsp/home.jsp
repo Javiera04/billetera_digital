@@ -30,6 +30,8 @@
 	      <div class="col">
 	        <a href="/cuenta/deposito" type="button" class="btn btn-success mx-3">Depositar</a>
 	        <a href="/cuenta/retiro" type="button" class="btn btn-danger mx-3">Retirar</a>
+	        <a href="/cuenta/transferir" type="button" class="btn btn-info text-light mx-3">Transferir</a>
+	        <a href="/contactos" type="button" class="btn btn-secondary mx-3">Contactos</a>
 	        <a href="/transacciones" type="button" class="btn btn-primary mx-3">Transacciones</a>
 	      	<a href="/logout" type="button" class="btn btn-warning mx-3">Salir</a>
 	      </div>

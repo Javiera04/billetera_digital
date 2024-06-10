@@ -9,18 +9,70 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<h1>Transferir Dinero</h1>
-    <form action="/cuenta/transferir" method="post">
-        <label for="cuenta_destino">ID de Cuenta Destino:</label>
-        <input type="text" id="cuenta_destino" name="cuenta_destino" required><br><br>
-        <label for="monto_transferencia">Monto:</label>
-        <input type="text" id="monto_transferencia" name="monto_transferencia" required><br><br>
-        <input type="submit" value="Transferir">
-    </form>
-    
-    <c:if test="${not empty message}">
-        <p>${message}</p>
-    </c:if>
+	<div class="container pt-5">
+		<div class="row text-center"> 
+	      <div class="col">
+	        <h1>Transferir</h1>
+	      </div>
+	    </div>
+	    <form action="/cuenta/transferir" method="post" class="row g-3 needs-validation d-flex justify-content-center" novalidate>
+	        <div class="col-md-4">
+		        <label for="cuenta_destino" class="form-label">Selecciona un Contacto</label>
+		        <select class="form-select" id="cuenta_destino" name="cuenta_destino" required>
+			      <option selected disabled value="">Lista de contactos...</option>
+			      <c:forEach var="contacto" items="${contactos}">
+		              <option value="${contacto.id_contacto}">${contacto.nombre} ${contacto.apellido}</option>
+		          </c:forEach>
+			    </select>
+			    <div class="invalid-feedback">
+			      Debe seleccionar un contacto.
+			    </div>
+	        </div>
+	        <div class="col-md-4">
+	        	<label for="monto_transferencia" class="form-label">Monto</label>
+	        	<input type="number" class="form-control" id="monto_transferencia" name="monto_transferencia" required>
+	        	<div class="invalid-feedback">
+		          Para transferir se necesita un monto.
+		        </div>
+	        </div>
+	        <div class="col-12 text-center">
+		        <button class="btn btn-danger" type="submit">Transferir</button>
+		    </div>
+	    </form>
+	    
+	    <c:if test="${not empty message}">
+	        <p>${message}</p>
+	    </c:if>
+	    
+	    <div class="row pt-5 text-center">
+		   <div class="col">
+		     <a href="/home" type="button" class="btn btn-primary mx-3">Volver al menú principal</a>
+		   </div>
+		</div>        
+	</div>
+	
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    (() => {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script>
 
 </body>
 </html>

@@ -15,6 +15,7 @@ import com.bootcamp.billetera.model.Usuario;
 import com.bootcamp.billetera.service.ContactoService;
 import com.bootcamp.billetera.service.UsuarioService;
 
+
 @Controller
 @RequestMapping("/contactos")
 public class ContactoController {
@@ -42,12 +43,14 @@ public class ContactoController {
 	}
 	
 	@PostMapping("/agregar")
-	public ModelAndView formAgregar(@RequestParam int idContacto,
+	public ModelAndView formAgregar(@RequestParam int nro_cuenta,
 			Authentication authentication) {
 		String cuentaAuth = authentication.getName();
 		Usuario usuario = usuarioService.obtenerPorUser(cuentaAuth);
 		
-		boolean resultado= contactoService.crear(usuario.getId_usuario(), idContacto);
+		Usuario contacto = usuarioService.obtenerPorNroCuenta(nro_cuenta);
+		
+		boolean resultado= contactoService.crear(usuario.getId_usuario(), contacto.getId_usuario());
 		String view="formulario-fallo.jsp";
 		
 		if(!resultado == false) {

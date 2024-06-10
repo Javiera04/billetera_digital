@@ -15,7 +15,7 @@
 	        <h1>Depositar</h1>
 	      </div>
 	    </div>
-	    <form action="#" method="post" class="row g-3 needs-validation d-flex  justify-content-center" novalidate>
+	    <form action="#" method="post" class="row g-3 needs-validation d-flex justify-content-center" novalidate>
 	      <div class="col-md-4">
 	        <label for="monto_deposito" class="form-label">Monto a depositar</label>
 	        <input type="number" class="form-control" id="monto_deposito" name="monto_deposito" required>

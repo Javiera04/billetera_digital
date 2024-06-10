@@ -6,5 +6,6 @@ import com.bootcamp.billetera.model.Transaccion;
 
 public interface TransaccionDao {
 	boolean crear(Transaccion transaccion);
+	boolean crearTransaccionDestino(Transaccion transaccion);
 	List<Transaccion> obtenerTransacciones(String username);
 }

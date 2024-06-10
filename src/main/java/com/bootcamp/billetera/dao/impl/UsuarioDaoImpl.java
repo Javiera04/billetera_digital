@@ -129,4 +129,23 @@ public class UsuarioDaoImpl implements UsuarioDao, UserDetailsService{
 		}
 	}
 
+	@Override
+	public Usuario obtenerPorNroCuenta(int nroCuenta) {
+		try{
+			String sql="""
+					select u.id_usuario, u.username, u.password, u.nombre, u.apellido, u.email 
+					from usuario u inner join cuenta c on u.id_usuario = c.id_usuario
+					where c.nro_cuenta = ?
+					""";
+			Usuario usuario =jdbcTemplate.queryForObject(sql, 
+										  	new UsuarioRowMapper(), 
+										  	new Object [] {nroCuenta});
+			
+			return usuario;
+		}catch(Exception ex) {
+			log.error("Error al obtener por usuario:"+ex.getMessage(),ex);
+			return null;
+		}
+	}
+
 }

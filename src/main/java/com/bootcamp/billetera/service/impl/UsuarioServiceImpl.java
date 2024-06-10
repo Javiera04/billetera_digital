@@ -39,6 +39,11 @@ public class UsuarioServiceImpl implements UsuarioService{
 		return usuarioDao.obtenerPorId(id);
 	}
 
+	@Override
+	public Usuario obtenerPorNroCuenta(int nroCuenta) {
+		return usuarioDao.obtenerPorNroCuenta(nroCuenta);
+	}
+
 	
 
 }

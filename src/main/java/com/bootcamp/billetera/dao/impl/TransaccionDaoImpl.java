@@ -66,4 +66,27 @@ public class TransaccionDaoImpl implements TransaccionDao{
 		}
 	}
 
+	@Override
+	@Transactional
+	public boolean crearTransaccionDestino(Transaccion transaccion) {
+		try {
+			
+			String sql = """
+					insert into transaccion(id_cuenta_origen, id_cuenta_destino, fecha_transaccion, monto, id_tipo)
+					values(?,?,?,?,?)
+					""";
+			jdbcTemplate.update(sql,
+					transaccion.getId_cuenta_origen(),
+					transaccion.getId_cuenta_destino(),
+					transaccion.getFecha_transaccion(),
+					transaccion.getMonto(),
+					transaccion.getId_tipo());
+			return true;
+			
+		}catch(Exception ex) {
+			log.error("Error al crear:"+ex.getMessage(),ex);
+			return false;
+		}
+	}
+
 }

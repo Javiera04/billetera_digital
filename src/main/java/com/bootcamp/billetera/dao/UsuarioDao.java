@@ -6,4 +6,5 @@ public interface UsuarioDao {
 	boolean crear(Usuario usuario);
 	Usuario obtenerPorId(int id);
 	Usuario obtenerPorUser(String username);
+	Usuario obtenerPorNroCuenta(int nroCuenta);
 }
