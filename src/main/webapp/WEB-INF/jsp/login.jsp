@@ -20,12 +20,12 @@
 			<form  action="/login" method="post">
 	            <div data-mdb-input-init class="form-outline mb-4">
 	              <input type="text" name="username" id="typeEmailX-2" class="form-control form-control-lg" />
-	              <label class="form-label" for="typeEmailX-2">Usuario</label>
+	              <label class="form-label" for="typeEmailX-2">Nombre de usuario</label>
 	            </div>
 	
 	            <div data-mdb-input-init class="form-outline mb-4">
 	              <input type="password"name="password" id="typePasswordX-2" class="form-control form-control-lg" />
-	              <label class="form-label" for="typePasswordX-2">Clave</label>
+	              <label class="form-label" for="typePasswordX-2">Contraseña</label>
 	            </div>
 	
 	
