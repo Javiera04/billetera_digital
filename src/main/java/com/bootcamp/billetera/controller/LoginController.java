@@ -10,7 +10,10 @@ public class LoginController {
 
 	@GetMapping("/login")
 	public String login(Model model, @RequestParam(name="error", required = false) String error) {
-		model.addAttribute("error", error);
-		return "login.jsp";
+		if (error != null) {
+	        model.addAttribute("message", "Credenciales incorrectas. Por favor, inténtelo de nuevo.");
+	        model.addAttribute("alertClass", "alert-danger");
+	    }
+	    return "login.jsp";
 	}
 }

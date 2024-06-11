@@ -33,38 +33,45 @@ public class CuentaServiceImpl implements CuentaService{
 	}
 
 	@Override
-	public void retirar(String username, int monto) {
+	public boolean retirar(String username, int monto) {
 		try {
 			int saldoActual = cuentaDao.obtenerSaldo(username);
 			if(saldoActual < monto) {
 				System.out.println("Saldo insuficiente");
+				return false;
 			}
 			else if(monto<=0){
 				System.out.println("Monto a retirar menor a 0");
+				return false;
 			}
 			else {
 				cuentaDao.actualizarSaldo(username, saldoActual-monto);
+				return true;
 			}
 			
 		}catch(Exception ex) {
 			log.error("Error al retirar saldo:"+ex.getMessage(),ex);
+			return false;
 		}
 		
 	}
 
 	@Override
-	public void depositar(String username, int monto) {
+	public boolean depositar(String username, int monto) {
 		try {
 			int saldoActual = cuentaDao.obtenerSaldo(username);
 			if(monto<=0) {
 				System.out.println("Monto a depositar menor o igual a 0");
+				return false;
 			}
 			else {
 				cuentaDao.actualizarSaldo(username, saldoActual+monto);
+				return true;
 			}
 			
 		}catch(Exception ex) {
 			log.error("Error al retirar saldo:"+ex.getMessage(),ex);
+			return false;
 		}
 		
 	}
@@ -75,15 +82,17 @@ public class CuentaServiceImpl implements CuentaService{
 	}
 
 	@Override
-	public void transferir(int idOrigen, int idDestino, int monto) {
+	public boolean transferir(int idOrigen, int idDestino, int monto) {
 		Cuenta cuentaOrigen = cuentaDao.obtenerCuentaPorId(idOrigen);
 		Cuenta cuentaDestino = cuentaDao.obtenerCuentaPorId(idDestino);
 		
-		if(cuentaOrigen.getSaldo()>=monto && idOrigen != idDestino) {
+		if(cuentaOrigen.getSaldo()>=monto && idOrigen != idDestino && monto>0) {
 			cuentaDao.actualizarSaldoPorId(idOrigen, cuentaOrigen.getSaldo()-monto);
 			cuentaDao.actualizarSaldoPorId(idDestino, cuentaDestino.getSaldo()+monto);
+			return true;
 		}else {
 			System.out.println("Saldo insuficiente en la cuenta de origen");
+			return false;
 		}
 		
 	}

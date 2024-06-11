@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,12 +45,21 @@ public class CuentaController {
 	}
 	
 	@PostMapping("/deposito")
+	@Transactional
 	public String postDeposito(@RequestParam("monto_deposito") int monto,
 			Authentication authentication,
 			Model model) {
 		
 		try {
 			Usuario usuario = usuarioService.obtenerPorUser(authentication.getName());
+			
+			boolean depositoExitoso = cuentaService.depositar(authentication.getName(), monto);
+			
+			if(!depositoExitoso) {
+				model.addAttribute("message", "Error al intentar realizar el depósito");
+				model.addAttribute("alertClass", "alert-danger");
+				return "deposito.jsp";
+			}
 			
 			Date fechaTransaccion = new Date();
 			java.sql.Timestamp timestamp = new java.sql.Timestamp(fechaTransaccion.getTime());
@@ -60,12 +70,18 @@ public class CuentaController {
 			transaccion.setMonto(monto);
 			transaccion.setId_tipo(1);
 			
-			transaccionService.crear(transaccion);
+			boolean transaccionCreada = transaccionService.crear(transaccion);
 			
-			cuentaService.depositar(authentication.getName(), monto);
-			model.addAttribute("message", "Retiro exitoso");
+			 if(!transaccionCreada) {
+				 throw new Exception("Error al crear la transacción");
+		     }
+			
+			model.addAttribute("message", "Depósito exitoso");
+			model.addAttribute("alertClass", "alert-success");
 		}catch(Exception e) {
-			model.addAttribute("message", "Error al intentar realizar el retiro ");
+			model.addAttribute("message", "Error al intentar realizar el depósito ");
+			model.addAttribute("alertClass", "alert-danger");
+			throw new RuntimeException(e);
 		}
 		
 		return "deposito.jsp";
@@ -77,12 +93,21 @@ public class CuentaController {
 	}
 	
 	@PostMapping("/retiro")
+	@Transactional
 	public String postRetiro(@RequestParam("monto_retiro") int monto,
 			Authentication authentication,
 			Model model) {
 		
 		try {
 			Usuario usuario = usuarioService.obtenerPorUser(authentication.getName());
+			
+			boolean retiroExitoso = cuentaService.retirar(authentication.getName(), monto);
+			
+			if(!retiroExitoso) {
+				model.addAttribute("message", "Error al intentar realizar el retiro");
+				model.addAttribute("alertClass", "alert-danger");
+				return "retiro.jsp";
+			}
 			
 			Date fechaTransaccion = new Date();
 			java.sql.Timestamp timestamp = new java.sql.Timestamp(fechaTransaccion.getTime());
@@ -93,12 +118,18 @@ public class CuentaController {
 			transaccion.setMonto(monto);
 			transaccion.setId_tipo(2);
 			
-			transaccionService.crear(transaccion);
+			boolean transaccionCreada = transaccionService.crear(transaccion);
 			
-			cuentaService.retirar(authentication.getName(), monto);
+			if(!transaccionCreada) {
+				throw new Exception("Error al crear la transacción");
+			}
+			
 			model.addAttribute("message", "Retiro exitoso");
+			model.addAttribute("alertClass", "alert-success");
 		}catch(Exception e) {
 			model.addAttribute("message", "Error al intentar realizar el retiro ");
+			model.addAttribute("alertClass", "alert-danger");
+			throw new RuntimeException(e);
 		}
 		
 		return "retiro.jsp";
@@ -119,6 +150,7 @@ public class CuentaController {
 	}
 	
 	@PostMapping("/transferir")
+	@Transactional
 	public String postTransferir(@RequestParam("cuenta_destino") int idDestino, 
 			@RequestParam("monto_transferencia") int monto,
 			Authentication authentication,
@@ -128,6 +160,14 @@ public class CuentaController {
 		
 		try {
 			Usuario usuario = usuarioService.obtenerPorUser(authentication.getName());
+			
+			boolean transferenciaExitosa = cuentaService.transferir(cuentaOrigen.getId_cuenta(), idDestino, monto);
+			
+			if(!transferenciaExitosa) {
+				model.addAttribute("message", "Error al intentar realizar la transferencia");
+				model.addAttribute("alertClass", "alert-danger");
+				return "transferir.jsp";
+			}
 			
 			Date fechaTransaccion = new Date();
 			java.sql.Timestamp timestamp = new java.sql.Timestamp(fechaTransaccion.getTime());
@@ -142,13 +182,19 @@ public class CuentaController {
 			System.out.println(idDestino);
 			System.out.println(transaccion);
 			
-			transaccionService.crearTransaccionDestino(transaccion);
+			boolean transaccionCreada = transaccionService.crearTransaccionDestino(transaccion);
 			
-			cuentaService.transferir(cuentaOrigen.getId_cuenta(), idDestino, monto);
+			if(!transaccionCreada) {
+				throw new Exception("Error al crear la transacción");
+			}
+			
 			model.addAttribute("message", "Transferencia realizada con éxito");
+			model.addAttribute("alertClass", "alert-success");
 		}catch (Exception e) {
             model.addAttribute("message", "Error al realizar la transferencia: " + e.getMessage());
-        }
+            model.addAttribute("alertClass", "alert-danger");
+            throw new RuntimeException(e);
+		}
 		
 		return "transferir.jsp";
 		

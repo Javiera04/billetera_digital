@@ -49,10 +49,10 @@ public class TransaccionDaoImpl implements TransaccionDao{
 	public List<Transaccion> obtenerTransacciones(String username) {
 		try{
 			String sql ="""
-					select id_transaccion, id_cuenta_origen, id_cuenta_destino, 
-					fecha_transaccion, monto, id_tipo
+					select t.id_transaccion, t.id_cuenta_origen, t.id_cuenta_destino, 
+					t.fecha_transaccion, t.monto, t.id_tipo
 					from transaccion t inner join usuario u 
-					on t.id_cuenta_origen = u.id_usuario
+					on t.id_cuenta_origen = u.id_usuario or t.id_cuenta_destino = u.id_usuario
 					where u.username = ?
 					""";
 			List<Transaccion> transacciones = jdbcTemplate.query(sql, 

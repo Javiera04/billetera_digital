@@ -45,35 +45,52 @@ public class ContactoController {
 	@PostMapping("/agregar")
 	public ModelAndView formAgregar(@RequestParam int nro_cuenta,
 			Authentication authentication) {
-		String cuentaAuth = authentication.getName();
-		Usuario usuario = usuarioService.obtenerPorUser(cuentaAuth);
-		
-		Usuario contacto = usuarioService.obtenerPorNroCuenta(nro_cuenta);
-		
-		boolean resultado= contactoService.crear(usuario.getId_usuario(), contacto.getId_usuario());
-		String view="formulario-fallo.jsp";
-		
-		if(!resultado == false) {
-			view="formulario-exito.jsp";
-			
-		}
-		return new ModelAndView(view);
+		 ModelAndView mav = new ModelAndView("contacto.jsp");
+		 String cuentaAuth = authentication.getName();
+		 Usuario usuario = usuarioService.obtenerPorUser(cuentaAuth);
+		 Usuario contacto = usuarioService.obtenerPorNroCuenta(nro_cuenta);
+		    
+		 if (contacto != null) {
+			 boolean resultado = contactoService.crear(usuario.getId_usuario(), contacto.getId_usuario());
+
+			 if (resultado) {
+				 mav.addObject("message", "Contacto agregado exitosamente");
+				 mav.addObject("alertClass", "alert-success");
+			 } else {
+				 mav.addObject("message", "Error al agregar el contacto");
+				 mav.addObject("alertClass", "alert-danger");
+			 }
+		 } else {
+			 mav.addObject("message", "Número de cuenta no encontrado");
+			 mav.addObject("alertClass", "alert-danger");
+		 }
+		    
+		 List<Contacto> contactos = contactoService.obtenerContactos(usuario.getId_usuario());
+		 mav.addObject("contactos", contactos);
+
+		 return mav;
 	}
 	
 	@PostMapping("/eliminar")
 	public ModelAndView formEliminar(@RequestParam int idContacto,
 			Authentication authentication) {
+		ModelAndView mav = new ModelAndView("contacto.jsp");
 		String cuentaAuth = authentication.getName();
 		Usuario usuario = usuarioService.obtenerPorUser(cuentaAuth);
 		
 		boolean resultado= contactoService.eliminar(usuario.getId_usuario(), idContacto);
-		String view="formulario-fallo.jsp";
-		
-		if(!resultado == false) {
-			view="formulario-exito.jsp";
-			
+		if (resultado) {
+			mav.addObject("messageTwo", "Contacto eliminado exitosamente");
+			mav.addObject("alertClass", "alert-success");
+		} else {
+			mav.addObject("messageTwo", "Error al eliminar el contacto");
+			mav.addObject("alertClass", "alert-danger");
 		}
-		return new ModelAndView(view);
+		    
+		List<Contacto> contactos = contactoService.obtenerContactos(usuario.getId_usuario());
+		mav.addObject("contactos", contactos);
+
+		return mav;
 	}
 	
 

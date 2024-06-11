@@ -23,7 +23,12 @@ public class ContactoServiceImpl implements ContactoService{
 	@Override
 	public boolean crear(int idUsuario, int idContacto) {
 		try {
-			return contactoDao.crear(idUsuario,idContacto);
+			if(idUsuario != idContacto) {
+				return contactoDao.crear(idUsuario,idContacto);
+			}else {
+				return false;
+			}
+	
 		}catch(Exception ex){
 			log.error("Error al crear el usuario:"+ex.getMessage(),ex);
 			return false;

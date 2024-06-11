@@ -7,6 +7,16 @@
 	<meta charset="UTF-8">
 	<title>Contactos</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
+	<script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $(".alert").alert('close');
+            }, 2500);
+        });
+    </script>
+
 </head>
 <body>
 	<div class="container pt-5">
@@ -17,10 +27,6 @@
 			        <h1>Agregar contactos</h1>
 			      </div>
 			    </div>
-				<c:if test="${not empty error}">
-		        	<div style="color: red">${error}</div>
-		    	</c:if>
-		    	
 		    	<form action="${pageContext.request.contextPath}/contactos/agregar" method="post" class="row g-3 needs-validation d-flex  justify-content-center" novalidate>
 		        	<div class="col-md-4">
 			        	<label for="nro_cuenta" class="form-label">Número de cuenta</label>
@@ -33,6 +39,15 @@
 			        	<button class="btn btn-success" type="submit">Agregar Contacto</button>
 			      	</div>
 		    	</form>
+		    	
+		    	<div class="pt-2">
+			    	<c:if test="${not empty message}">
+			            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+			                ${message}
+			            </div>
+		        	</c:if>
+			    </div>
+		    	
 			</div>
 			<div class="col-md-6">
 				<div class="row text-center"> 
@@ -67,10 +82,20 @@
 			          </c:forEach>
 			          </tbody>
 			        </table>
+			        
+			        <div class="pt-2">
+				    	<c:if test="${not empty messageTwo}">
+				            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+				                ${messageTwo}
+				            </div>
+			        	</c:if>
+				    </div>
+			        
 			      </div>
 			    </div>
 			</div>	
 		</div>
+		
 		<div class="row pt-5 text-center">
 	      <div class="col">
 	        <a href="/home" type="button" class="btn btn-primary mx-3">Volver al menú principal</a>

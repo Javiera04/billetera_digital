@@ -28,15 +28,18 @@ public class UsuarioController {
 	
 	@PostMapping
 	public ModelAndView formPost(@ModelAttribute Usuario usuario) {
-		
+		ModelAndView mav = new ModelAndView("registro.jsp");
 		boolean resultado= usuarioService.crear(usuario);
-		String view="formulario-fallo.jsp";
 		
-		if(!resultado == false) {
-			view="formulario-exito.jsp";
-			
+		if(resultado) {
+			mav.addObject("message", "Usuario creado exitosamente");
+			mav.addObject("alertClass", "alert-success");
+		}else {
+			mav.addObject("message", "Error al crear el usuario");
+			mav.addObject("alertClass", "alert-danger");
 		}
-		return new ModelAndView(view);
+		
+		return mav;
 	}
 
 }
